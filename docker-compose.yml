@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: pulsepoll-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - polling-network
+
+  # Redis Realtime Cache & Pub/Sub
+  redis:
+    image: redis:7.2-alpine
+    container_name: pulsepoll-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: ["redis-server", "--appendonly", "yes"]
+    networks:
+      - polling-network
+
+  # Go Backend Service (Gin)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: pulsepoll-backend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - MONGO_URI=mongodb://mongodb:27017
+      - MONGO_DB_NAME=live_polling_db
+      - REDIS_URI=redis://redis:6379
+      - JWT_SECRET=pulse-poll-secret-key-change-in-production-12345
+      - CORS_ORIGIN=*
+      - ENV=production
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - polling-network
+
+  # React Frontend (Nginx SPA)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: pulsepoll-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - polling-network
+
+networks:
+  polling-network:
+    driver: bridge
+
+volumes:
+  mongo_data:
+  redis_data:

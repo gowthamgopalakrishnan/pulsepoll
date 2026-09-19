@@ -1,0 +1,43 @@
+services:
+  # 1. PulsePoll Go Gin Backend
+  - type: web
+    name: pulsepoll-backend
+    runtime: go
+    rootDir: backend
+    plan: free
+    buildCommand: go build -o server ./cmd/server
+    startCommand: ./server
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: MONGO_URI
+        sync: false # Set to your MongoDB Atlas connection string
+      - key: MONGO_DB_NAME
+        value: live_polling_db
+      - key: REDIS_URI
+        sync: false # Set to your Upstash Redis connection string
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        value: "*"
+      - key: ENV
+        value: production
+
+  # 2. PulsePoll React Frontend
+  - type: web
+    name: pulsepoll-frontend
+    runtime: static
+    rootDir: frontend
+    plan: free
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: pulsepoll-backend
+          property: host

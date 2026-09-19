@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Binaries & Executables
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+backend/server
+server.exe
+
+# Build Artifacts
+frontend/dist/
+frontend/dist-ssr/
+*.local
+
+# Environment files
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# IDE & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
+
+# Docker
+.dockerignore
