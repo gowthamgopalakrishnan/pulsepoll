@@ -244,25 +244,4 @@ The React frontend will be accessible at `http://localhost:5173`.
 
 ---
 
-## 🎥 Submission Video & Interview Preparation Guide
 
-The GUVI / HCL submission requires a **3–5 minute video** walking through the project. Here is an outline to follow:
-
-### 1. Demonstration (1.5 – 2 mins)
-- Open the application. Log in as a creator.
-- Create a new poll with 3 options and show how options can be dynamically added/removed.
-- Open the poll in two side-by-side browser windows:
-  - Window A: Audience voting screen (`/poll/:id`)
-  - Window B: Projector view (`/poll/:id/results`)
-- Cast a vote in Window A. Show that Window B updates **instantly with zero refresh** and an animated progress bar.
-- Attempt to vote again in Window A to demonstrate **duplicate vote prevention**.
-
-### 2. The Technical Challenge You Faced & Solved (1 min)
-> **Recommended talking point**:
-> *"The biggest architectural challenge was handling high-concurrency real-time updates without overloading the database or creating race conditions. If 500 audience members vote in the exact same second, updating MongoDB directly causes lock contention, slow response times, and potential vote loss.*
-> 
-> *To solve this, I designed a Redis-first ingestion pipeline. When a vote arrives, Go executes an atomic Redis `SADD` to verify voter uniqueness and `HINCRBY` to increment option counts in RAM in less than 1 millisecond. Redis Pub/Sub then broadcasts the new state to all connected WebSockets, while a background worker asynchronously writes the vote audit trail to MongoDB. This completely decouples fast real-time broadcasting from disk I/O."*
-
-### 3. The AI Tooling Question (1 min)
-> **Honest & Professional Response**:
-> *"I used AI pair-programming assistants during development. It was particularly helpful for accelerating boilerplate generation (such as Gin route scaffolding and repetitive CSS styles for the dark mode theme). However, I made sure to thoroughly understand and own every layer of the architecture — especially how Gorilla WebSockets manage client channels, how Redis Pub/Sub multiplexing operates in Go goroutines, and how atomic operations prevent race conditions. The AI acted as a productivity multiplier, while the architectural decisions and system design were intentionally crafted to meet all performance requirements."*
