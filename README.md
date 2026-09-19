@@ -1,10 +1,13 @@
 # PulsePoll — Real-Time Live Polling System
 
-[![Go Version](https://img.shields.io/badge/Go-1.22+-00ADD8?style=flat&logo=go)](https://golang.org)
-[![Gin Framework](https://img.shields.io/badge/Framework-Gin-00ADD8?style=flat)](https://gin-gonic.com/)
-[![React](https://img.shields.io/badge/Frontend-React_18-61DAFB?style=flat&logo=react)](https://react.dev)
-[![Redis](https://img.shields.io/badge/Realtime-Redis_7-DC382D?style=flat&logo=redis)](https://redis.io)
-[![MongoDB](https://img.shields.io/badge/Database-MongoDB_7-47A248?style=flat&logo=mongodb)](https://www.mongodb.com)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-pulsepoll--frontend.onrender.com-success?style=for-the-badge&logo=render)](https://pulsepoll-frontend-xd12.onrender.com)
+[![Backend API](https://img.shields.io/badge/Backend%20API-pulsepoll--backend.onrender.com-blue?style=for-the-badge)](https://pulsepoll-backend-i4aq.onrender.com/api/health)
+[![GitHub](https://img.shields.io/badge/GitHub-gowthamgopalakrishnan%2Fpulsepoll-181717?style=for-the-badge&logo=github)](https://github.com/gowthamgopalakrishnan/pulsepoll)
+
+> **Live Deployed Links**:
+> - 🌐 **Live Web Application (Frontend)**: **[https://pulsepoll-frontend-xd12.onrender.com](https://pulsepoll-frontend-xd12.onrender.com)**
+> - ⚡ **Live API Service (Backend)**: **[https://pulsepoll-backend-i4aq.onrender.com](https://pulsepoll-backend-i4aq.onrender.com)**
+> - 📦 **Public GitHub Repository**: **[https://github.com/gowthamgopalakrishnan/pulsepoll](https://github.com/gowthamgopalakrishnan/pulsepoll)**
 
 A production-grade, high-concurrency **Live Polling System** built for the **GUVI / HCL Developer Internship Task**. An authenticated creator creates a poll and shares the link or QR code with an audience. Votes cast by the audience are validated server-side, counted atomically with sub-millisecond latency via Redis, and broadcast live to all active viewers with **zero page refreshes**.
 
