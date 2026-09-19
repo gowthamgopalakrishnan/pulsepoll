@@ -11,11 +11,11 @@ services:
       - key: PORT
         value: 8080
       - key: MONGO_URI
-        sync: false # Set to your MongoDB Atlas connection string
+        value: mongodb+srv://Gowtham:sqMbDrg2ob5NLuV5@cluster0.hdxupyi.mongodb.net/?retryWrites=true&w=majority
       - key: MONGO_DB_NAME
         value: live_polling_db
       - key: REDIS_URI
-        sync: false # Set to your Upstash Redis connection string
+        value: rediss://default:gQAAAAAABF8_AAIgcDFjYTQ0MDI2MjQxNTY0YTVlYTJiYTU3Y2QwZjJlYzhjMQ@enough-heron-286527.upstash.io:6379
       - key: JWT_SECRET
         generateValue: true
       - key: CORS_ORIGIN
