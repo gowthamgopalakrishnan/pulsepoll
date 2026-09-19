@@ -2,12 +2,23 @@
 
 export const API_BASE_URL = (() => {
   let envUrl = import.meta.env.VITE_API_URL;
-  if (!envUrl) {
-    if (typeof window !== 'undefined' && window.location.hostname.includes('onrender.com')) {
+
+  // When loaded from Render frontend domain
+  if (typeof window !== 'undefined' && window.location.hostname.includes('onrender.com')) {
+    if (!envUrl || !envUrl.includes('.onrender.com')) {
       return "https://pulsepoll-backend-i4aq.onrender.com";
     }
+  }
+
+  if (!envUrl) {
     return "http://localhost:8080";
   }
+
+  // Handle Render internal service names like pulsepoll-backend-i4aq
+  if (envUrl.includes('pulsepoll-backend') && !envUrl.includes('.onrender.com')) {
+    return "https://pulsepoll-backend-i4aq.onrender.com";
+  }
+
   if (!envUrl.startsWith("http://") && !envUrl.startsWith("https://")) {
     return `https://${envUrl}`;
   }
@@ -15,8 +26,15 @@ export const API_BASE_URL = (() => {
 })();
 
 export const getWsUrl = (pollId) => {
-  if (import.meta.env.VITE_WS_URL) {
-    return `${import.meta.env.VITE_WS_URL}/ws/polls/${pollId}`;
+  let envWs = import.meta.env.VITE_WS_URL;
+  if (envWs) {
+    if (envWs.includes('pulsepoll-backend') && !envWs.includes('.onrender.com')) {
+      return `wss://pulsepoll-backend-i4aq.onrender.com/ws/polls/${pollId}`;
+    }
+    if (!envWs.startsWith('ws://') && !envWs.startsWith('wss://')) {
+      return `wss://${envWs}/ws/polls/${pollId}`;
+    }
+    return `${envWs}/ws/polls/${pollId}`;
   }
   if (API_BASE_URL.startsWith("http")) {
     const url = new URL(API_BASE_URL);

@@ -9,7 +9,6 @@ import (
 
 func CORSMiddleware(allowedOrigin string) gin.HandlerFunc {
 	config := cors.Config{
-		AllowAllOrigins:  true,
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization", "X-Requested-With"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -18,8 +17,13 @@ func CORSMiddleware(allowedOrigin string) gin.HandlerFunc {
 	}
 
 	if allowedOrigin != "*" && allowedOrigin != "" {
-		config.AllowAllOrigins = false
 		config.AllowOrigins = []string{allowedOrigin, "http://localhost:5173", "http://localhost:3000"}
+	} else {
+		// Allow all origins by dynamically reflecting the request origin,
+		// ensuring W3C browser compatibility when AllowCredentials is true
+		config.AllowOriginFunc = func(origin string) bool {
+			return true
+		}
 	}
 
 	return cors.New(config)

@@ -36,7 +36,6 @@ services:
         destination: /index.html
     envVars:
       - key: VITE_API_URL
-        fromService:
-          type: web
-          name: pulsepoll-backend
-          property: host
+        value: https://pulsepoll-backend-i4aq.onrender.com
+      - key: VITE_WS_URL
+        value: wss://pulsepoll-backend-i4aq.onrender.com
