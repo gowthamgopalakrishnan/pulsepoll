@@ -1,18 +1,29 @@
 // API Client for Live Polling backend
 
-export const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
+export const API_BASE_URL = (() => {
+  let envUrl = import.meta.env.VITE_API_URL;
+  if (!envUrl) {
+    if (typeof window !== 'undefined' && window.location.hostname.includes('onrender.com')) {
+      return "https://pulsepoll-backend-i4aq.onrender.com";
+    }
+    return "http://localhost:8080";
+  }
+  if (!envUrl.startsWith("http://") && !envUrl.startsWith("https://")) {
+    return `https://${envUrl}`;
+  }
+  return envUrl;
+})();
 
 export const getWsUrl = (pollId) => {
   if (import.meta.env.VITE_WS_URL) {
     return `${import.meta.env.VITE_WS_URL}/ws/polls/${pollId}`;
   }
-  const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-  // If API_BASE_URL is relative or absolute
   if (API_BASE_URL.startsWith("http")) {
     const url = new URL(API_BASE_URL);
     const wsProto = url.protocol === "https:" ? "wss:" : "ws:";
     return `${wsProto}//${url.host}/ws/polls/${pollId}`;
   }
+  const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
   return `${protocol}//${window.location.host}/ws/polls/${pollId}`;
 };
 
