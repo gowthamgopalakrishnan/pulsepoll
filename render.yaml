@@ -1,10 +1,10 @@
 services:
-  # 1. PulsePoll Go Gin Backend
+  # 1. PulsePoll Go Gin Backend (Web Service)
   - type: web
     name: pulsepoll-backend
     runtime: go
-    rootDir: backend
     plan: free
+    rootDir: backend
     buildCommand: go build -o server ./cmd/server
     startCommand: ./server
     envVars:
@@ -23,12 +23,10 @@ services:
       - key: ENV
         value: production
 
-  # 2. PulsePoll React Frontend
-  - type: web
+  # 2. PulsePoll React Frontend (Static Site)
+  - type: static
     name: pulsepoll-frontend
-    runtime: static
     rootDir: frontend
-    plan: free
     buildCommand: npm install && npm run build
     staticPublishPath: dist
     routes:
